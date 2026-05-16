@@ -10,10 +10,10 @@ export default function ProductCard({ product }: { product: Product }) {
     >
       <div className="relative h-64 w-full">
         <Image
-          src={product.image}
+          src={product.images[0]}
           alt={product.title}
           fill
-          className="object-cover"
+          className="object-contain"
         />
       </div>
 

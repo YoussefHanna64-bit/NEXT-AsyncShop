@@ -1,54 +1,27 @@
 import ProductList from "@/components/ProductList";
+import { getAllProducts } from "@/services/productsAPI";
 
 export const metadata = {
   title: "Products",
   description: "Products",
 };
 
-const productsList = [
-  {
-    id: "1",
-    title: "Wireless Headphones",
-    price: 199.99,
-    image: "/bg-home.jpg",
-  },
-  {
-    id: "2",
-    title: "Mechanical Keyboard",
-    price: 120.5,
-    image: "/bg-home.jpg",
-  },
-  {
-    id: "3",
-    title: "Gaming Mouse",
-    price: 65.0,
-    image: "/bg-home.jpg",
-  },
-  {
-    id: "4",
-    title: "Wireless Headphones",
-    price: 199.99,
-    image: "/bg-home.jpg",
-  },
-  {
-    id: "5",
-    title: "Mechanical Keyboard",
-    price: 120.5,
-    image: "/bg-home.jpg",
-  },
-  {
-    id: "6",
-    title: "Gaming Mouse",
-    price: 65.0,
-    image: "/bg-home.jpg",
-  },
-];
+export default async function ProductsPage() {
+  const data = await getAllProducts();
+  const products = data.products || [];
 
-export default function ProductsPage() {
+  if (products.length === 0) {
+    return (
+      <div className="m-10">
+        <h1 className="text-4xl font-bold mb-10 text-center">No Products Found</h1>
+      </div>
+    );
+  }
+  
   return (
     <div className="m-10">
       <h1 className="text-4xl font-bold mb-10 text-center">Our Products</h1>
-      <ProductList products={productsList} />
+      <ProductList products={products} />
     </div>
   );
 }

@@ -1,42 +1,34 @@
+import { getProductById } from "@/services/productsAPI";
 import Image from "next/image";
 
 interface Props {
-  params: {
-    productId: string;
-  };
+  params: Promise<{
+    id: number;
+  }>;
 }
 
-function getProduct(id: string) {
-  return {
-    id,
-    title: "Wireless Headphones",
-    price: 199.99,
-    description:
-      "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    image: "/bg-home.jpg",
-  };
-}
 export async function generateMetadata({ params }: Props) {
-  const { productId } = await params;
-  const product = await getProduct(productId);
+  const { id } = await params;
+  console.log("Generating metadata for product ID:", id);
+  const product = await getProductById(id);
   return {
     title: product.title,
   };
 }
 
 export default async function ProductDetails({ params }: Props) {
-  const { productId } = await params;
-  const product = await getProduct(productId);
+  const { id } = await params;
+  const product = await getProductById(id);
 
   return (
     <div className="max-w-5xl mx-auto px-8 py-12 mt-10">
       <div className="flex flex-col md:flex-row gap-10 items-start">
         <div className="w-full md:w-1/2 relative h-100 rounded-lg overflow-hidden border border-gray-800">
           <Image
-            src={product.image}
+            src={product.images[0]}
             alt={product.title}
             fill
-            className="object-cover"
+            className="object-contain"
           />
         </div>
 
