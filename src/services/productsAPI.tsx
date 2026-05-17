@@ -16,3 +16,12 @@ export const getProductById = async (id: number) => {
   }
   return res.json();
 };
+
+export const getProductsByCategory = async (category: string) => {
+  const res = await fetch(`${baseURL}/category/${category}`);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch products for category`);
+  }
+  return res.json();
+};

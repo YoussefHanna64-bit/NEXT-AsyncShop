@@ -9,7 +9,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
   const { id } = await params;
-  console.log("Generating metadata for product ID:", id);
+
   const product = await getProductById(id);
   return {
     title: product.title,
