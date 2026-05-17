@@ -6,6 +6,8 @@ export const metadata = {
   description: "Products",
 };
 
+export const revalidate = 20;
+
 export default async function ProductsPage() {
   const data = await getAllProducts();
   const products = data.products || [];
