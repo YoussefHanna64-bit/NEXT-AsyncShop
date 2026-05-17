@@ -4,6 +4,7 @@ const navItems = [
   { name: "Home", path: "/" },
   { name: "Products", path: "/products" },
   { name: "Categories", path: "/categories" },
+  { name: "Cart", path: "/cart" },
 ];
 
 export default function Navigation() {
