@@ -1,6 +1,12 @@
 import { Suspense } from "react";
 import Spinner from "@/components/Spinner";
-import CartList from "../../components/cartList";
+import CartList from "../../components/CartList";
+
+export const metadata = {
+  title: "Your Cart",
+};
+
+export const dynamic = "force-dynamic";
 
 export default function Cart() {
   return (

@@ -3,12 +3,7 @@ import { useState } from "react";
 import { useCartStore } from "@/store/cartStore";
 
 interface Props {
-  product: {
-    id: number;
-    title: string;
-    price: number;
-    image: string;
-  };
+  product: Product;
 }
 
 export default function AddToCartSection({ product }: Props) {
@@ -26,12 +21,14 @@ export default function AddToCartSection({ product }: Props) {
   };
 
   const handleAdd = () => {
+    const image = product.images?.[0];
+
     addToCart({
       id: product.id,
       title: product.title,
       price: product.price,
-      image: product.image,
-      quantity: quantity,
+      image,
+      quantity,
     });
   };
 
