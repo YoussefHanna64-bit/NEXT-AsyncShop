@@ -1,3 +1,4 @@
+import AddToCartSection from "@/components/AddToCart";
 import { getProductById } from "@/services/productsAPI";
 import Image from "next/image";
 
@@ -40,9 +41,7 @@ export default async function ProductDetails({ params }: Props) {
 
           <p className="text-gray-300 mb-10 text-lg">{product.description}</p>
 
-          <button className="bg-teal-400 px-8 py-4 text-gray-900 text-lg font-bold hover:bg-teal-300 transition-colors rounded-full w-full">
-            Add to Cart
-          </button>
+          <AddToCartSection product={product} />
         </div>
       </div>
     </div>
