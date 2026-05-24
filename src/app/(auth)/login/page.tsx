@@ -100,7 +100,21 @@ export default function LoginPage() {
           Sign in with Google
         </button>
 
-        <p className="mt-8 text-center text-sm text-gray-400">
+        <button
+          onClick={() => signIn("facebook", { callbackUrl: "/" })}
+          className="my-4 w-full flex items-center justify-center gap-3 bg-white text-gray-900 font-bold py-3 rounded-lg hover:bg-gray-200 transition-colors"
+        >
+          <Image
+            src="https://authjs.dev/img/providers/facebook.svg"
+            alt="Facebook Logo"
+            width={20}
+            height={20}
+            className="object-contain"
+          />
+          Sign in with Facebook
+        </button>
+
+        <p className="mx-8 text-center text-sm text-gray-400">
           Don't have an account?
           <Link href="/register" className="text-teal-400 hover:underline">
             Sign up
