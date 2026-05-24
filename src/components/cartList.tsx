@@ -67,9 +67,12 @@ export default function CartList() {
           </div>
         </div>
 
-        <button className="w-full bg-teal-400 text-gray-900 py-4 rounded-full font-bold text-lg hover:bg-teal-300 transition-colors shadow-lg shadow-teal-400/10">
+        <Link
+          href="/checkout"
+          className="block w-full text-center bg-teal-400 text-gray-900 py-4 rounded-full font-bold text-lg hover:bg-teal-300 transition-colors shadow-lg shadow-teal-400/10"
+        >
           Proceed to Checkout
-        </button>
+        </Link>
       </div>
     </div>
   );

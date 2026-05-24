@@ -7,9 +7,12 @@ import { getCurrentUserWishlistIds } from "@/services/wishlist";
 import { getProductById } from "@/services/productsAPI";
 import ProductCard from "@/components/ProductCard";
 import clientPromise from "@/services/mongodb";
+import { getUserOrders } from "@/services/orders";
+import OrderHistory from "@/components/OrderHistory";
+import { Order } from "@/types/Order";
 
 export const metadata = {
-  title: "Your Profile | AsyncShop",
+  title: "Your Profile",
 };
 
 export const dynamic = "force-dynamic";
@@ -35,6 +38,8 @@ export default async function ProfilePage() {
   const wishlistProducts = await Promise.all(
     wishlistIds.map((id) => getProductById(id)),
   );
+
+  const orders = await getUserOrders();
 
   return (
     <div className="max-w-6xl mx-auto px-8 py-12 mt-5 w-full">
@@ -77,7 +82,9 @@ export default async function ProfilePage() {
               <span className="text-sm text-gray-400 block mb-1">
                 Total Orders
               </span>
-              <span className="text-xl font-bold text-teal-400">0</span>
+              <span className="text-xl font-bold text-teal-400">
+                {orders.length}
+              </span>
             </div>
           </div>
         </div>
@@ -107,6 +114,12 @@ export default async function ProfilePage() {
             ))}
           </div>
         )}
+      </div>
+      <div>
+        <h2 className="text-3xl font-bold m-8 border-b border-gray-800 pb-4">
+          Order History
+        </h2>
+        <OrderHistory orders={orders} />
       </div>
     </div>
   );
