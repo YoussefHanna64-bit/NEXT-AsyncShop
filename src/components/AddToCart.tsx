@@ -1,12 +1,17 @@
 "use client";
 import { useState } from "react";
 import { useCartStore } from "@/store/cartStore";
+import WishlistButton from "./WishlistButton";
 
 interface Props {
   product: Product;
+  showWishlistButton?: boolean;
 }
 
-export default function AddToCartSection({ product }: Props) {
+export default function AddToCartSection({
+  product,
+  showWishlistButton = false,
+}: Props) {
   const [quantity, setQuantity] = useState(1);
   const addToCart = useCartStore((state) => state.addToCart);
 
@@ -57,12 +62,22 @@ export default function AddToCartSection({ product }: Props) {
         </div>
       </div>
 
-      <button
-        onClick={handleAdd}
-        className="bg-teal-400 px-8 py-4 text-gray-900 text-lg font-bold hover:bg-teal-300 transition-colors rounded-full w-full"
-      >
-        Add to Cart
-      </button>
+      <div className="flex flex-col gap-4 sm:flex-row">
+        <button
+          onClick={handleAdd}
+          className="w-full rounded-full bg-teal-400 px-8 py-4 text-lg font-bold text-gray-900 transition-colors hover:bg-teal-300 sm:flex-1"
+        >
+          Add to Cart
+        </button>
+
+        {showWishlistButton && (
+          <WishlistButton
+            productId={product.id}
+            variant="secondary"
+            className="w-full sm:w-auto"
+          />
+        )}
+      </div>
     </div>
   );
 }

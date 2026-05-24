@@ -41,7 +41,7 @@ export default async function ProductDetails({ params }: Props) {
           </p>
 
           <ExpandableText text={product.description} />
-          <AddToCartSection product={product} />
+          <AddToCartSection product={product} showWishlistButton />
         </div>
       </div>
     </div>

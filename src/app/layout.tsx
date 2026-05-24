@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Montserrat } from "next/font/google";
+import Providers from "../components/Providers";
 
 export const metadata = {
   title: "AsyncShop",
@@ -21,7 +22,7 @@ export default function RootLayout({
           " min-h-screen flex flex-col relative text-white"
         }
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
