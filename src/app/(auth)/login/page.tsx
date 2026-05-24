@@ -5,6 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -22,7 +24,25 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginFormValues) => {};
+  const [serverError, setServerError] = useState("");
+  const router = useRouter();
+
+  const onSubmit = async (data: LoginFormValues) => {
+    setServerError("");
+
+    const result = await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
+
+    if (result?.error) {
+      setServerError(result.error || "Failed to sign in.");
+      return;
+    }
+
+    router.push("/");
+  };
 
   return (
     <div className="flex flex-1 items-center justify-center p-8 mt-10 w-full">
@@ -35,6 +55,11 @@ export default function LoginPage() {
         </p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 mb-8">
+          {serverError && (
+            <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-lg text-sm mb-4 text-center">
+              {serverError}
+            </div>
+          )}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">
               Email

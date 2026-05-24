@@ -78,7 +78,7 @@ export default function CheckoutPage() {
               <input
                 {...register("address", { required: "Address is required" })}
                 className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-teal-400 outline-none transition-colors"
-                placeholder="123 Developer Way"
+                placeholder="Grove ST"
               />
               {errors.address && (
                 <p className="text-red-400 text-sm mt-1">
