@@ -1,6 +1,7 @@
 import AddToCartSection from "@/components/AddToCart";
 import ExpandableText from "@/components/ExpandableText";
 import { getProductById } from "@/services/productsAPI";
+import { getCurrentUserWishlistIds } from "@/services/wishlist";
 import Image from "next/image";
 
 interface Props {
@@ -21,6 +22,7 @@ export async function generateMetadata({ params }: Props) {
 export default async function ProductDetails({ params }: Props) {
   const { id } = await params;
   const product = await getProductById(id);
+  const wishlistedProductIds = await getCurrentUserWishlistIds();
 
   return (
     <div className="max-w-5xl mx-auto px-8 py-12 mt-10">
@@ -41,7 +43,11 @@ export default async function ProductDetails({ params }: Props) {
           </p>
 
           <ExpandableText text={product.description} />
-          <AddToCartSection product={product} showWishlistButton />
+          <AddToCartSection
+            product={product}
+            showWishlistButton
+            initialIsWished={wishlistedProductIds.includes(product.id)}
+          />
         </div>
       </div>
     </div>

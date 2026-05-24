@@ -6,11 +6,13 @@ import WishlistButton from "./WishlistButton";
 interface Props {
   product: Product;
   showWishlistButton?: boolean;
+  initialIsWished?: boolean;
 }
 
 export default function AddToCartSection({
   product,
   showWishlistButton = false,
+  initialIsWished = false,
 }: Props) {
   const [quantity, setQuantity] = useState(1);
   const addToCart = useCartStore((state) => state.addToCart);
@@ -73,6 +75,7 @@ export default function AddToCartSection({
         {showWishlistButton && (
           <WishlistButton
             productId={product.id}
+            initialIsWished={initialIsWished}
             variant="secondary"
             className="w-full sm:w-auto"
           />

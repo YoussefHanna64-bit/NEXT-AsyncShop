@@ -1,8 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Heart, LoaderCircle } from "lucide-react";
+import { toggleWishlistItem } from "@/app/actions/wishlist";
 
 interface Props {
   productId: number;
@@ -23,6 +24,10 @@ export default function WishlistButton({
   const [isWished, setIsWished] = useState(initialIsWished);
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    setIsWished(initialIsWished);
+  }, [initialIsWished]);
+
   const toggleWishlist = async (e: React.MouseEvent) => {
     e.preventDefault();
 
@@ -33,25 +38,15 @@ export default function WishlistButton({
 
     setIsLoading(true);
 
-    try {
-      const response = await fetch("/api/wishlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId }),
-      });
+    const result = await toggleWishlistItem(productId);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setIsWished(data.isWished);
-      } else {
-        console.error(data.error);
-      }
-    } catch (error) {
-      console.error("Failed to update wishlist");
-    } finally {
-      setIsLoading(false);
+    if (result.success) {
+      setIsWished(result.isWished);
+    } else {
+      console.error(result.error);
     }
+
+    setIsLoading(false);
   };
 
   return (

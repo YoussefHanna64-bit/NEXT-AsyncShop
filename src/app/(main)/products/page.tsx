@@ -1,13 +1,14 @@
 import ProductList from "@/components/ProductList";
 import ProductFilters from "@/components/ProductFilters";
 import { getAllProducts } from "@/services/productsAPI";
+import { getCurrentUserWishlistIds } from "@/services/wishlist";
 
 export const metadata = {
   title: "Products",
   description: "Products",
 };
 
-export const revalidate = 20;
+export const dynamic = "force-dynamic";
 
 interface Props {
   searchParams: Promise<{
@@ -19,6 +20,7 @@ interface Props {
 export default async function ProductsPage({ searchParams }: Props) {
   const params = await searchParams;
   const data = await getAllProducts();
+  const wishlistedProductIds = await getCurrentUserWishlistIds();
   let products = data.products || [];
 
   const search = (params.search || "").toLowerCase();
@@ -43,7 +45,10 @@ export default async function ProductsPage({ searchParams }: Props) {
           </h2>
         </div>
       ) : (
-        <ProductList products={products} />
+        <ProductList
+          products={products}
+          wishlistedProductIds={wishlistedProductIds}
+        />
       )}
     </div>
   );

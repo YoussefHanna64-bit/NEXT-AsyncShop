@@ -2,11 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import WishlistButton from "./WishlistButton";
 
-export default function ProductCard({ product }: { product: Product }) {
+interface Props {
+  product: Product;
+  initialIsWished?: boolean;
+}
+
+export default function ProductCard({ product, initialIsWished = false }: Props) {
   return (
     <div className="group relative overflow-hidden rounded-lg border border-gray-700 bg-gray-800 transition-colors hover:border-teal-400">
       <WishlistButton
         productId={product.id}
+        initialIsWished={initialIsWished}
         variant="icon"
         className="absolute right-3 top-3 z-10"
       />
