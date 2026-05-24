@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authConfig } from "@/services/auth";
 import NavLink from "./NavLink";
 import LogoutButton from "./LogoutButton";
+import Link from "next/link";
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -30,13 +31,15 @@ export default async function Navigation() {
         {session && (
           <li className="flex items-center gap-3 text-sm text-gray-400">
             {session.user?.image && (
-              <Image
-                src={session.user.image}
-                width={32}
-                height={32}
-                alt="User Avatar"
-                className="rounded-full"
-              />
+              <Link href="/profile">
+                <Image
+                  src={session.user.image}
+                  width={32}
+                  height={32}
+                  alt="User Avatar"
+                  className="rounded-full"
+                />
+              </Link>
             )}
             <LogoutButton />
           </li>
