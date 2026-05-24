@@ -1,4 +1,5 @@
 import AddToCartSection from "@/components/AddToCart";
+import ExpandableText from "@/components/ExpandableText";
 import { getProductById } from "@/services/productsAPI";
 import Image from "next/image";
 
@@ -39,8 +40,7 @@ export default async function ProductDetails({ params }: Props) {
             ${product.price}
           </p>
 
-          <p className="text-gray-300 mb-10 text-lg">{product.description}</p>
-
+          <ExpandableText text={product.description} />
           <AddToCartSection product={product} />
         </div>
       </div>
