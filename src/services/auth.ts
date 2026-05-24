@@ -1,9 +1,9 @@
-import NextAuth from "next-auth";
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import Google from "next-auth/providers/google";
 import { clientPromise } from "./mongodb";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 
-export const authConfig = {
+export const authConfig: NextAuthOptions = {
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     Google({
@@ -14,10 +14,11 @@ export const authConfig = {
   pages: {
     signIn: "/login",
   },
+  session: {
+    strategy: "jwt",
+  },
 };
 
 const handler = NextAuth(authConfig);
 
 export { handler as GET, handler as POST };
-
-

@@ -1,12 +1,15 @@
 import { getServerSession } from "next-auth/next";
 import { authConfig } from "@/services/auth";
 import { redirect } from "next/navigation";
-import clientPromise from "@/services/mongodb";
 import Image from "next/image";
 import EditProfileForm from "@/components/EditProfileForm";
+import { getCurrentUserWishlistIds } from "@/services/wishlist";
+import { getProductById } from "@/services/productsAPI";
+import ProductCard from "@/components/ProductCard";
+import clientPromise from "@/services/mongodb";
 
 export const metadata = {
-  title: "Your Profile",
+  title: "Your Profile | AsyncShop",
 };
 
 export const dynamic = "force-dynamic";
@@ -21,39 +24,28 @@ export default async function ProfilePage() {
   const db = client.db();
   const usersCollection = db.collection("users");
 
-  await usersCollection.updateOne(
-    { email: session.user.email },
-    {
-      $setOnInsert: {
-        email: session.user.email,
-        name: session.user.name,
-        image: session.user.image,
-        wishlistIds: [],
-      },
-    },
-    { upsert: true },
-  );
-
   const user = await usersCollection.findOne({ email: session.user.email });
 
   if (!user) {
-    return (
-      <div className="text-center mt-20 text-red-400">Error loading user profile.</div>
-    );
+    redirect("/login?callbackUrl=/profile");
   }
 
-  const wishlistCount = user.wishlistIds?.length || 0;
+  const wishlistIds = await getCurrentUserWishlistIds();
+
+  const wishlistProducts = await Promise.all(
+    wishlistIds.map((id) => getProductById(id)),
+  );
 
   return (
-    <div className="max-w-4xl mx-auto px-8 py-12 mt-5 w-full">
+    <div className="max-w-6xl mx-auto px-8 py-12 mt-5 w-full">
       <h1 className="text-4xl font-bold mb-10">My Account</h1>
 
-      <div className="bg-gray-800/40 border border-gray-800 rounded-2xl p-8 flex flex-col md:flex-row items-center md:items-start gap-8">
+      <div className="bg-gray-800/40 border border-gray-800 rounded-2xl p-8 flex flex-col md:flex-row items-center md:items-start gap-8 mb-16">
         {user.image ? (
           <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-gray-700 flex-shrink-0">
             <Image
               src={user.image}
-              alt="Profile Picture"
+              alt="Profile"
               fill
               className="object-cover"
             />
@@ -66,7 +58,9 @@ export default async function ProfilePage() {
 
         <div className="flex-1 space-y-4 text-center md:text-left">
           <div>
-            <h2 className="text-2xl font-bold text-white">{user.name}</h2>
+            <h2 className="text-2xl font-bold text-white">
+              {user.name || session.user.name}
+            </h2>
             <p className="text-gray-400">{user.email}</p>
           </div>
 
@@ -75,7 +69,9 @@ export default async function ProfilePage() {
               <span className="text-sm text-gray-400 block mb-1">
                 Items in Wishlist
               </span>
-                <span className="text-xl font-bold text-teal-400">{wishlistCount}</span>
+              <span className="text-xl font-bold text-teal-400">
+                {wishlistIds.length}
+              </span>
             </div>
             <div className="bg-gray-900/50 px-4 py-2 rounded-lg border border-gray-800">
               <span className="text-sm text-gray-400 block mb-1">
@@ -86,7 +82,31 @@ export default async function ProfilePage() {
           </div>
         </div>
 
-        <EditProfileForm userName={user.name}/>
+        <EditProfileForm userName={user.name || ""} />
+      </div>
+
+      <div>
+        <h2 className="text-3xl font-bold mb-8 border-b border-gray-800 pb-4">
+          Your Wishlist
+        </h2>
+
+        {wishlistProducts.length === 0 ? (
+          <div className="text-center py-16 bg-gray-800/20 border border-gray-800 rounded-2xl">
+            <p className="text-gray-400 text-lg">
+              You haven't saved any items yet.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {wishlistProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                initialIsWished={true}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
