@@ -2,6 +2,7 @@ import ProductList from "@/components/ProductList";
 import ProductFilters from "@/components/ProductFilters";
 import { getAllProducts } from "@/services/productsAPI";
 import { getCurrentUserWishlistIds } from "@/services/wishlist";
+import SortDropdown from "@/components/SortDropdown";
 
 export const metadata = {
   title: "Products",
@@ -14,6 +15,7 @@ interface Props {
   searchParams: Promise<{
     search?: string;
     price?: string;
+    sort?: string;
   }>;
 }
 
@@ -25,6 +27,7 @@ export default async function ProductsPage({ searchParams }: Props) {
 
   const search = (params.search || "").toLowerCase();
   const price = params.price ? Number(params.price) : Infinity;
+  const sort = params.sort || "";
 
   products = products.filter(
     (p: any) =>
@@ -32,11 +35,20 @@ export default async function ProductsPage({ searchParams }: Props) {
       (price === Infinity || p.price <= price),
   );
 
+  if (sort === "price_asc") {
+    products.sort((a: any, b: any) => a.price - b.price);
+  } else if (sort === "price_desc") {
+    products.sort((a: any, b: any) => b.price - a.price);
+  }
+
   return (
     <div className="m-10">
       <h1 className="text-4xl font-bold mb-10 text-center">Our Products</h1>
 
-      <ProductFilters />
+      <div className="flex flex-row items-center justify-between gap-4 mb-8 flex-wrap">
+        <ProductFilters />
+        <SortDropdown />
+      </div>
 
       {products.length === 0 ? (
         <div className="text-center mt-20">

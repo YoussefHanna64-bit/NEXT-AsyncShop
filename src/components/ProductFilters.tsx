@@ -42,17 +42,17 @@ export default function ProductFilters() {
   return (
     <form
       onSubmit={handleSearchSubmit}
-      className="flex flex-col md:flex-row gap-4 mb-10 items-center justify-between"
+      className="flex flex-row gap-4 items-center justify-start w-full md:w-auto mb-0"
     >
       <input
         type="text"
         placeholder="Search"
         value={search}
         onChange={handleSearchChange}
-        className="bg-gray-800 text-white border border-gray-700 focus:border-teal-400 px-4 py-3 rounded-lg w-full md:w-1/2 outline-none transition-colors"
+        className="bg-gray-800 text-white border border-gray-700 focus:border-teal-400 px-3 py-2 rounded-lg w-auto md:w-64 outline-none transition-colors"
       />
 
-      <div className="flex flex-wrap gap-2 mt-2 md:mt-0">
+      <div className="flex items-center gap-2 whitespace-nowrap w-auto">
         {priceOptions.map(({ label, value }) => {
           const isActive = currentPrice === value.toString();
           return (
